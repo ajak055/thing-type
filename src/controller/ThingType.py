@@ -52,7 +52,6 @@ class ThingType:
         self.logger.info("deleteThingType invoked")
         typeValidator = Validator(self.logger)
         document = typeValidator.validateIfIdExists(self.db_handler, id)
-        print("doc", document)
         self.db_handler.deleteDocument(const.DB_NAME, document, self.logger)
         return {"message": "resource delete for given id"}
 

@@ -55,7 +55,6 @@ class Validator:
         self.logger.info("validateUpdateThingTypeRequest invoked")
         query = { "selector": {"id" : {"$eq": id}}}
         queryResponse = db_handler.findSingleDocument(const.DB_NAME, query, self.logger)
-        print(queryResponse)
         nameQuery = { "selector": {"name" : {"$eq": data['name']}}}
         validateName = db_handler.findDocument(const.DB_NAME, nameQuery, self.logger)
         if queryResponse['etag'] != data['etag']:
@@ -66,3 +65,12 @@ class Validator:
                 raise BusinessValidationError("given name already exists")
         self.logger.info("validateUpdateThingTypeRequest exited")
         return {"_id": queryResponse['_id'], "_rev" : queryResponse['_rev']}
+    
+    def validateModelRequest(self, data):
+        self.logger.info("validateModelRequest invoked")
+        if not isinstance(data['models'], list):
+            raise BusinessValidationError("model should of type list")
+        self.logger.info("validateModelRequest exited")
+
+        
+

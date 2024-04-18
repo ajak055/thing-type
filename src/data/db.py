@@ -45,6 +45,16 @@ class CouchDB:
         if len(query_response) == 0:
             raise NotFoundError("Data doesn't exists for given Id")
         return query_response[0]
+
+    def findModelDocument(self, dbname, query, logger):
+        logger.info("Data: findSingleDocument invoked")
+        query_response = []
+        db = self.dbObject[dbname]
+        result = db.find(query)
+        for i in result:
+            query_response.append(i)
+        logger.info("Data: findSingleDocument exited")
+        return query_response
     
     def deleteDocument(self, dbname, document, logger):
         logger.info("Data: deleteDocument invoked")
