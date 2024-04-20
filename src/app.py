@@ -97,5 +97,17 @@ def fetchModels():
    except Exception as e:
       return failure_response(e)  
 
+@app.route("/v1/type/model/<id>", methods = ["DELETE"])
+def removeModel(id):
+   try:
+      logger = Logger("thing-type")
+      logger.info("API: removeModel invoked")
+      fetchThingModel = Models(db_handler, logger)
+      response = fetchThingModel.removeModel(id)
+      logger.info("API: removeModel exited")
+      return success_response(response)
+   except Exception as e:
+      return failure_response(e)  
+
 if __name__ == '__main__':
    app.run(host = '0.0.0.0', port=8000, debug=False)

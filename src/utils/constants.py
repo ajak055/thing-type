@@ -1,4 +1,3 @@
-
 class Constants:
 
     def __init__(self) -> None:
@@ -26,9 +25,9 @@ class Constants:
     def queryConstants(self, input):
         return self.__query_constants[input]
     
-    @classmethod
-    def models(cls):
-        return ["esp32", "picow", "pi3", "pi4", "arduino", "nodemcu"]
+    # @classmethod
+    # def models(cls):
+    #     return ["esp32", "picow", "pi3", "pi4", "arduino", "nodemcu"]
     
     @classmethod
     def category(cls):

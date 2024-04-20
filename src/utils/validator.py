@@ -7,7 +7,7 @@ class Validator:
         self.logger = logger
         pass
 
-    def validateThingType(self, data):
+    def validateThingType(self, data, db_handler):
         self.logger.info("validateThingType invoked")
         if not 'name' in data:
               self.logger.error("Error : Name is required field")
@@ -25,6 +25,7 @@ class Validator:
             self.logger.error("Category has to be of type list")
             raise BusinessValidationError("Category has to be of type list")
         catgoryCompare = all(ele in Constants.category() for ele in data['category'])
+
         if not catgoryCompare:
             self.logger.error("Category has invalid value")
             raise BusinessValidationError("Category has invalid value, supported are {data}".format(data=Constants.category()))
@@ -33,9 +34,11 @@ class Validator:
             self.logger.error("model is required")
             raise BusinessValidationError("model is required")
         
-        if data['model'] not in Constants.models():
+        models = self.getThingModels(db_handler)
+        print("models ", models)
+        if data['model'] not in models["models"]:
             self.logger.error("given model is not available")
-            raise BusinessValidationError("given model is not available, supported models are {data}".format(data=Constants.models()))
+            raise BusinessValidationError("given model is not available, supported models are {data}".format(data=models["models"]))
                 
         self.logger.info("validateThingType exited")
 
@@ -71,6 +74,15 @@ class Validator:
         if not isinstance(data['models'], list):
             raise BusinessValidationError("model should of type list")
         self.logger.info("validateModelRequest exited")
-
-        
-
+  
+    def getThingModels(self, db_handler):
+        self.logger.info("getThingModels invoked")
+        query = { "selector": {"name" : {"$eq": "thingModel"}}}
+        queryResponse = db_handler.findModelDocument(const.MODEL_DB_NAME, query, self.logger)
+        if len(queryResponse) == 0:
+            raise NotFoundError("Model doesnt exists")
+        del queryResponse[0]['_id']
+        del queryResponse[0]['_rev']
+        del queryResponse[0]['name']
+        self.logger.info("getThingModels exited")
+        return queryResponse[0]

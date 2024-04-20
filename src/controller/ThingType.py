@@ -17,7 +17,7 @@ class ThingType:
     def createThingType(self, data):
         self.logger.info("createThingType invoked")
         typeValidator = Validator(self.logger)
-        typeValidator.validateThingType(data)
+        typeValidator.validateThingType(data, self.db_handler)
         typeValidator.validateIfNameExists(self.db_handler, data)
         self.db_handler.insertDocument(const.DB_NAME, data, self.logger)
         self.logger.info("createThingType exited")
@@ -42,7 +42,7 @@ class ThingType:
     def updateThingType(self, id, data):
         self.logger.info("updateThingType invoked")
         typeValidator = Validator(self.logger)
-        typeValidator.validateThingType(data)
+        typeValidator.validateThingType(data, self.db_handler)
         document = typeValidator.validateUpdateThingTypeRequest(self.db_handler, id, data)
         updateDocument = self.__updateType_query(data, document)
         self.db_handler.updateDocument(const.DB_NAME, updateDocument, self.logger)
