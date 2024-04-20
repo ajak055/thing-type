@@ -3,6 +3,7 @@ from utils.logger import Logger
 from utils.response import success_response, failure_response
 from controller.ThingType import ThingType
 from controller.Models import Models
+from controller.Category import Category
 from data.db import CouchDB
 import utils.env_constants as const
 
@@ -85,6 +86,19 @@ def addModels():
    except Exception as e:
       return failure_response(e)  
 
+@app.route("/v1/type/category", methods = ["PUT"])
+def addCategory():
+   try:
+      logger = Logger("thing-type")
+      logger.info("API: addCategory invoked")
+      addThingCategory = Category(db_handler, logger)
+      input = request.get_json()
+      response = addThingCategory.addCategory(input)
+      logger.info("API: addCategory exited")
+      return success_response(response)
+   except Exception as e:
+      return failure_response(e)  
+
 @app.route("/v1/type/model", methods = ["GET"])
 def fetchModels():
    try:
@@ -97,14 +111,38 @@ def fetchModels():
    except Exception as e:
       return failure_response(e)  
 
+@app.route("/v1/type/category", methods = ["GET"])
+def fetchCategory():
+   try:
+      logger = Logger("thing-type")
+      logger.info("API: fetchCategory invoked")
+      fetchThingCategory = Category(db_handler, logger)
+      response = fetchThingCategory.fetchCategory()
+      logger.info("API: fetchCategory exited")
+      return success_response(response)
+   except Exception as e:
+      return failure_response(e)  
+
 @app.route("/v1/type/model/<id>", methods = ["DELETE"])
 def removeModel(id):
    try:
       logger = Logger("thing-type")
       logger.info("API: removeModel invoked")
-      fetchThingModel = Models(db_handler, logger)
-      response = fetchThingModel.removeModel(id)
+      removeThingModel = Models(db_handler, logger)
+      response = removeThingModel.removeModel(id)
       logger.info("API: removeModel exited")
+      return success_response(response)
+   except Exception as e:
+      return failure_response(e)  
+
+@app.route("/v1/type/category/<id>", methods = ["DELETE"])
+def removeCategory(id):
+   try:
+      logger = Logger("thing-type")
+      logger.info("API: removeCategory invoked")
+      removeThingCategory = Category(db_handler, logger)
+      response = removeThingCategory.removeCategory(id)
+      logger.info("API: removeCategory exited")
       return success_response(response)
    except Exception as e:
       return failure_response(e)  

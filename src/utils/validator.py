@@ -24,18 +24,19 @@ class Validator:
         if not isinstance(data['category'], list):
             self.logger.error("Category has to be of type list")
             raise BusinessValidationError("Category has to be of type list")
-        catgoryCompare = all(ele in Constants.category() for ele in data['category'])
+        
+        category = self.getThingCategory(db_handler)
+        catgoryCompare = all(ele in category['category'] for ele in data['category'])
 
         if not catgoryCompare:
             self.logger.error("Category has invalid value")
-            raise BusinessValidationError("Category has invalid value, supported are {data}".format(data=Constants.category()))
+            raise BusinessValidationError("Category has invalid value, supported are {data}".format(data=category['category']))
 
         if not 'model' in data:
             self.logger.error("model is required")
             raise BusinessValidationError("model is required")
         
         models = self.getThingModels(db_handler)
-        print("models ", models)
         if data['model'] not in models["models"]:
             self.logger.error("given model is not available")
             raise BusinessValidationError("given model is not available, supported models are {data}".format(data=models["models"]))
@@ -74,6 +75,12 @@ class Validator:
         if not isinstance(data['models'], list):
             raise BusinessValidationError("model should of type list")
         self.logger.info("validateModelRequest exited")
+
+    def validateCategoryRequest(self, data):
+        self.logger.info("validateCategoryRequest invoked")
+        if not isinstance(data['category'], list):
+            raise BusinessValidationError("categpry should of type list")
+        self.logger.info("validateCategoryRequest exited")
   
     def getThingModels(self, db_handler):
         self.logger.info("getThingModels invoked")
@@ -85,4 +92,16 @@ class Validator:
         del queryResponse[0]['_rev']
         del queryResponse[0]['name']
         self.logger.info("getThingModels exited")
+        return queryResponse[0]
+
+    def getThingCategory(self, db_handler):
+        self.logger.info("getThingCategory invoked")
+        query = { "selector": {"name" : {"$eq": "thingCategory"}}}
+        queryResponse = db_handler.findModelDocument(const.CATEGORY_DATABASE_NAME, query, self.logger)
+        if len(queryResponse) == 0:
+            raise NotFoundError("Category doesnt exists")
+        del queryResponse[0]['_id']
+        del queryResponse[0]['_rev']
+        del queryResponse[0]['name']
+        self.logger.info("getThingCategory exited")
         return queryResponse[0]

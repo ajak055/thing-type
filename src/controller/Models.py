@@ -39,10 +39,7 @@ class Models:
         query = { "selector": {"name" : {"$eq": "thingModel"}}}
         queryResponse = self.db_handler.findModelDocument(const.MODEL_DB_NAME, query, self.logger)
         try:
-            print("query response before deletion ",queryResponse)
             queryResponse[0]['models'].remove(id)
-            print("query response after deletion ",queryResponse)
-
             self.db_handler.updateDocument(const.MODEL_DB_NAME, queryResponse[0], self.logger)
             return {"message": "model removed successfully"}
         except Exception as err:
