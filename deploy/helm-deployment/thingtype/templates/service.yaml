@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: {{ include "thingtype.fullname" . }}
+  labels:
+    {{- include "thingtype.labels" . | nindent 4 }}
+spec:
+  type: {{ .Values.service.type }}
+  allocateLoadBalancerNodePorts: true
+  externalTrafficPolicy: Cluster
+  internalTrafficPolicy: Cluster
+  ports:
+    - port: {{ .Values.service.port }}
+      targetPort: {{ .Values.service.targetPort }}
+      protocol: TCP
+      name: http
+  selector:
+    {{- include "thingtype.selectorLabels" . | nindent 4 }}

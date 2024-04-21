@@ -147,5 +147,14 @@ def removeCategory(id):
    except Exception as e:
       return failure_response(e)  
 
+@app.route("/health", methods = ["GET"])
+def healthcheck(id):
+   try:
+      logger = Logger("thing-type")
+      logger.info("API: healthcheck invoked")
+      return success_response({"message": "sucess"})
+   except Exception as e:
+      return failure_response(e)  
+
 if __name__ == '__main__':
    app.run(host = '0.0.0.0', port=8000, debug=False)
