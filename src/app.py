@@ -148,7 +148,7 @@ def removeCategory(id):
       return failure_response(e)  
 
 @app.route("/health", methods = ["GET"])
-def healthcheck(id):
+def healthcheck():
    try:
       logger = Logger("thing-type")
       logger.info("API: healthcheck invoked")

@@ -40,18 +40,18 @@ spec:
           envFrom:
           - secretRef:
               name: {{ include "thingtype.fullname" . }}
-          # livenessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8000
-          #   initialDelaySeconds: 3
-          #   periodSeconds: 30
-          # readinessProbe:
-          #   httpGet:
-          #     path: /health
-          #     port: 8000
-          #   initialDelaySeconds: 3
-          #   periodSeconds: 30
+          livenessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /health
+              port: 8000
+            initialDelaySeconds: 3
+            periodSeconds: 30
           resources:
             {{- toYaml .Values.resources | nindent 12 }}
       {{- with .Values.nodeSelector }}
@@ -66,3 +66,8 @@ spec:
       tolerations:
         {{- toYaml . | nindent 8 }}
       {{- end }}
+    strategy:
+      type: RollingUpdate
+      rollingUpdate:
+        maxSurge: 25%
+        maxUnavailable: 25%
