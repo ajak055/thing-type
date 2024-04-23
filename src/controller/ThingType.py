@@ -61,7 +61,7 @@ class ThingType:
             fetch_query['selector']['name'] = {"$eq": data['name']}
         if "category" in data:
             fetch_query['selector']['category'] = {"$eq": data['category']}
-        if "location" in data:
+        if "model" in data:
             fetch_query['selector']['model'] = {"$eq": data['location']}
         if "limit" in data:
             fetch_query['limit'] = int(data["limit"])
