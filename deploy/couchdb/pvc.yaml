@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: couch-pv-claim
+spec:
+  storageClassName: my-local-storage
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 2Gi
+  # selector:
+  #   matchLabels:
+  #     name: couch-pv-volume
