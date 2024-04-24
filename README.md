@@ -44,6 +44,34 @@ Category schema
 }
 ```
 ## Deployment
+Service can be run as stand alone, doocker or k8s deployment.
+
+### Stand alone
+ a. To run service as stand alone install python 3.11
+ b. install all dependencies from requirement.txt (pip install requirement.txt)
+ c. run app.py. default port is 8000
+ d. Couchdb needs to run before starting application
+ e. To update url, username, password of couchdb, we can set using environment variable or update in utils.env_constants.py
+ 
+### Docker
+ a. One can build docker image from source. Dockerfile is present in src directory.
+ b. build docker using below command
+ ```sh
+docker build -t <build name:version> src/ 
+```
+ c. Once docker image is built. it can be run using below command
+ ```sh
+docker run -d -p 8000:8080 <imagename:version>
+```
+d. couchdb should also required as standalone or docker container.
+e. docker image is also readily available in dockerhub ajayk05/thing_type
+
+### Kubernetes deployment
+a. Service is also available as helm chart deployment. User can add environment variables in values.yaml and can modify services as per requirements
+ ```sh
+helm install <name> thingtype
+```
+b. Couchdb deployment is also available.
 
 ## API Specs
 Api specs provides  request, response for thing-type, model and category
