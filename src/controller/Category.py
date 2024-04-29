@@ -48,10 +48,10 @@ class Category:
     def __data(self, request, dbData):
         self.logger.info("creating data for category update invoked")
         existingDataList = dbData['category']
-        requestDataList = request['models']
+        requestDataList = request['category']
         set1 = set(existingDataList)
         set2 = set(requestDataList)
         dbData["name"] = "thingCategory"
-        dbData["models"] = list(set1.union(set2))
+        dbData["category"] = list(set1.union(set2))
         self.logger.info("creating data for category update exited")
         return dbData

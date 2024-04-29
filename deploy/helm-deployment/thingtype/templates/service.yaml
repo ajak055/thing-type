@@ -2,13 +2,15 @@ apiVersion: v1
 kind: Service
 metadata:
   name: {{ include "thingtype.fullname" . }}
+  annotations: 
+     metallb.universe.tf/address-pool: default-pool
   labels:
     {{- include "thingtype.labels" . | nindent 4 }}
 spec:
   type: {{ .Values.service.type }}
-  allocateLoadBalancerNodePorts: true
-  externalTrafficPolicy: Cluster
-  internalTrafficPolicy: Cluster
+  # allocateLoadBalancerNodePorts: true
+  # externalTrafficPolicy: Cluster
+  # internalTrafficPolicy: Cluster
   ports:
     - port: {{ .Values.service.port }}
       targetPort: {{ .Values.service.targetPort }}

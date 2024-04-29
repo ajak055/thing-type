@@ -5,7 +5,7 @@ metadata:
   labels:
     app: couchdb
 spec:
-  type: LoadBalancer
+  type: ClusterIP
   ports:
     - port: 5984
       targetPort: 5984
@@ -53,4 +53,28 @@ spec:
       resources:
           requests:
             storage: 2G
-      
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: couchdb
+  labels:
+    app.kubernetes.io/name: couchdb
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    nginx.ingress.kubernetes.io/rewrite-target: /$2
+    kubernetes.io/ingress.global-static-ip-name: "192.168.1.201"
+spec:
+  ingressClassName: nginx
+  rules:
+    - host:
+      http:
+        paths:
+          - path: /couchdb(/|$)(.*)
+            pathType: Prefix
+            backend:
+              service:
+                name: couch-couchdb
+                port:
+                  number: 5984
